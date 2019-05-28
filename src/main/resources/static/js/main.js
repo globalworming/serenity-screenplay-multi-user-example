@@ -76,12 +76,15 @@ function onMessageReceived(payload) {
 
     if(message.type === 'JOIN') {
         messageElement.classList.add('event-message');
+        messageElement.classList.add('e2e-event-message');
         message.content = message.sender + ' joined!';
     } else if (message.type === 'LEAVE') {
         messageElement.classList.add('event-message');
+      messageElement.classList.add('e2e-event-message');
         message.content = message.sender + ' left!';
     } else {
         messageElement.classList.add('chat-message');
+        messageElement.classList.add('e2e-chat-message');
 
         var avatarElement = document.createElement('i');
         var avatarText = document.createTextNode(message.sender[0]);
