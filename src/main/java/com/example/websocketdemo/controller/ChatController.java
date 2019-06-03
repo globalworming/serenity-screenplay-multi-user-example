@@ -13,9 +13,14 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ChatController {
 
+    private boolean filterSwearWords;
+
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
+        if (filterSwearWords) {
+            chatMessage.setContent(chatMessage.getContent().replaceAll("fuck", "***"));
+        }
         return chatMessage;
     }
 
@@ -28,4 +33,7 @@ public class ChatController {
         return chatMessage;
     }
 
+    public void enableSwearWordFilter() {
+        filterSwearWords = true;
+    }
 }
