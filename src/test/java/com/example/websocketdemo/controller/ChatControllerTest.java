@@ -41,14 +41,12 @@ public class ChatControllerTest {
   @Autowired
   private ChatController chatController;
 
-  private Stage stage;
-
   @Before
   public void prepareTests() {
     Cast cast = new Cast();
     cast.actorNamed("Dana", new ConnectToWebsockets());
     cast.actorNamed("Bob", new ConnectToWebsockets());
-    stage = setTheStage(cast);
+    Stage stage = setTheStage(cast);
     stage.shineSpotlightOn("Dana");
     withCurrentActor(ConnectsToWebsocket.onPort(port));
     theActorInTheSpotlight().should(eventually(joinWebsocketSession()));
