@@ -77,7 +77,7 @@ public class ChatControllerTest {
   }
 
   @Test
-  public void sendMessageExplicitMessage() {
+  public void sendExplicitMessage() {
     ChatMessage expectedMessage = ChatMessage.chat("Dana", "fuck");
     theActorInTheSpotlight().attemptsTo(SendsChatMessage.saying("fuck"));
 
