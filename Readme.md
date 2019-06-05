@@ -1,3 +1,8 @@
+## example on how to integrate serenity bdd screenplay pattern into spring testing
+
+this includes integration testing of the [ChatController](src/test/websocketdemo/controller/ChatControllerTest.java)
+
+and [end-to-end testing](src/test/e2e/testcases) 
 
 ## Requirements
 
