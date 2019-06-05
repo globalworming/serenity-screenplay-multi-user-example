@@ -2,7 +2,7 @@
 
 this includes integration testing of the [ChatController](src/test/java/com/example/websocketdemo/controller/ChatControllerTest.java)
 
-and [end-to-end testing](src/test/java/com/example/e2e/testcases) 
+and [end-to-end testing](src/test/java/com/example/e2e/testcases/chat) 
 
 ## Requirements
 
