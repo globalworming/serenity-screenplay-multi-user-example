@@ -28,6 +28,10 @@ import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
 import static net.serenitybdd.screenplay.actors.OnStage.withCurrentActor;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+// Todo, remove redundancy in another actor joined 
+// Add package.info and @narrative 
+// Maybe try markdown resources 
+
 @RunWith(SerenityRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ChatControllerTest {
