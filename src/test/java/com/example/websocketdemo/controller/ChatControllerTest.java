@@ -28,8 +28,7 @@ import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
 import static net.serenitybdd.screenplay.actors.OnStage.withCurrentActor;
 import static org.hamcrest.core.IsEqual.equalTo;
 
-// Todo, remove redundancy in another actor joined 
-// Add package.info and @narrative 
+// Todo, package.info and @narrative
 // Maybe try markdown resources 
 
 @RunWith(SerenityRunner.class)
@@ -45,11 +44,15 @@ public class ChatControllerTest {
   @Autowired
   private ChatController chatController;
 
+  private Cast cast = Cast.whereEveryoneCan(new ConnectToWebsockets());
+
+  {
+    cast.actorNamed("Dana");
+    cast.actorNamed("Bob");
+  }
+
   @Before
-  public void prepareTests() {
-    Cast cast = new Cast();
-    cast.actorNamed("Dana", new ConnectToWebsockets());
-    cast.actorNamed("Bob", new ConnectToWebsockets());
+  public void danaJoinsTheChat() {
     Stage stage = setTheStage(cast);
     stage.shineSpotlightOn("Dana");
     withCurrentActor(ConnectsToWebsocket.onPort(port));
@@ -57,54 +60,58 @@ public class ChatControllerTest {
   }
 
   @Test
-  public void anotherActorJoins() {
-    Actor dana = theActorCalled("Dana");
-    dana.should(eventually(joinWebsocketSession()));
-
-    Actor bob = theActorCalled("Bob");
+  public void anotherActorJoinsTheChat() {
+    Actor bob = bob();
     bob.attemptsTo(ConnectsToWebsocket.onPort(port));
     bob.should(eventually(joinWebsocketSession()));
 
-    dana.should(eventually(seeThatBobJoined()));
+    dana().should(eventually(seeThatBobJoined()));
   }
-
 
   @Test
   public void sendMessage() {
-    ChatMessage expectedMessage = ChatMessage.chat(theActorInTheSpotlight().getName(), "hello");
+    ChatMessage helloMessage = ChatMessage.chat(theActorInTheSpotlight().getName(), "hello");
 
     theActorInTheSpotlight().attemptsTo(SendsChatMessage.saying("hello"));
-    theActorInTheSpotlight().should(eventually(seeThat(
-        new TheLatestMessageReceived(), equalTo(expectedMessage))));
+    theActorInTheSpotlight().should(eventually(seeThat(new TheLatestMessageReceived(), equalTo(helloMessage))));
   }
 
   @Test
   public void sendExplicitMessage() {
-    ChatMessage expectedMessage = ChatMessage.chat("Dana", "fuck");
+    ChatMessage explicitMessage = ChatMessage.chat("Dana", "fuck");
     theActorInTheSpotlight().attemptsTo(SendsChatMessage.saying("fuck"));
 
-    theActorInTheSpotlight().should(eventually(seeThat(
-        new TheLatestMessageReceived(), equalTo(expectedMessage))));
+    theActorInTheSpotlight().should(eventually(seeThat(new TheLatestMessageReceived(), equalTo(explicitMessage))));
   }
 
   @Test
   @DirtiesContext
   public void explicitMessageIsFiltered() {
-    ChatMessage expectedMessage = ChatMessage.chat("Dana", "***");
     chatController.enableSwearWordFilter();
+
+    ChatMessage censoredMessage = ChatMessage.chat("Dana", "***");
     theActorInTheSpotlight().attemptsTo(SendsChatMessage.saying("fuck"));
-    theActorInTheSpotlight().should(eventually(seeThat(
-        new TheLatestMessageReceived(), equalTo(expectedMessage))));
+    theActorInTheSpotlight().should(eventually(seeThat(new TheLatestMessageReceived(), equalTo(censoredMessage))));
   }
 
   private Consequence<ChatMessage> joinWebsocketSession() {
-    return seeThat(new TheLatestMessageReceived(),
-        equalTo(ChatMessage.join(theActorInTheSpotlight().getName())));
+    return seeThat(new TheLatestMessageReceived(), equalTo(ChatMessage.join(theActorInTheSpotlight().getName())));
   }
 
   private Consequence<ChatMessage> seeThatBobJoined() {
-    return seeThat(new TheLatestMessageReceived(),
-        equalTo(ChatMessage.join("Bob")));
+    return seeThat(new TheLatestMessageReceived(), equalTo(ChatMessage.join("Bob")));
+  }
+
+  private Actor dana() {
+    return getActor("dana");
+  }
+
+  private Actor bob() {
+    return getActor("Bob");
+  }
+
+  private Actor getActor(String actor) {
+    return theActorCalled(actor);
   }
 
 }
