@@ -5,6 +5,7 @@ import com.example.e2e.screenplay.actions.EntersChatRoom;
 import com.example.e2e.screenplay.actions.PostMessage;
 import com.example.e2e.screenplay.questions.ChatMessages;
 import net.serenitybdd.junit.runners.SerenityRunner;
+import net.thucydides.core.annotations.Narrative;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -17,7 +18,9 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.StringContains.containsString;
 
 @RunWith(SerenityRunner.class)
-public class ChatMessagesTest extends TestBase {
+@Narrative( text = "" +
+    "When in a chat session, the customer send and receive text messages"
+)public class ChatMessagesTest extends TestBase {
 
 
   @Test
