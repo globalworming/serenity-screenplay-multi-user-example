@@ -59,7 +59,7 @@ jobs:
       - run:
           name: Save test results
           command: |
-            rm -rf ./target/site/serenity/fontawesome-free-5.3.1-web
+            rm -rf ./target/site/serenity/fontawesome-free-5.7.2-web
             cp -r ./target/site/serenity ~/test-results/
           when: always
       - store_test_results:
