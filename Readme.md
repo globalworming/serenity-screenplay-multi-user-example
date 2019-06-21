@@ -4,6 +4,8 @@ this includes integration testing of the [ChatController](src/test/java/com/exam
 
 and [end-to-end testing](src/test/java/com/example/e2e/testcases/chat) with multiple actors
 
+circleci build [![CircleCI](https://circleci.com/gh/globalworming/serenity-screenplay-multi-user-example/tree/master.svg?style=svg)](https://circleci.com/gh/globalworming/serenity-screenplay-multi-user-example/tree/master)
+
 ## Requirements
 
 1. Java - 1.8.x
