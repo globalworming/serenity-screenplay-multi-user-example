@@ -43,14 +43,20 @@ jobs:
             curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
 
       - run:
-          name: Start Selenium
+          name: Start Selenium Grid
           command: |
             mkdir test-reports
-            java -jar selenium-server-standalone-3.5.3.jar -log test-reports/selenium.log
+            java -jar selenium-server-standalone-3.5.3.jar -role hub -log test-reports/selenium.log
+          background: true
+
+      - run:
+          name: Register node
+          command: |
+            java -jar selenium-server-standalone-3.5.3.jar -role node  -hub http://localhost:4444/grid/register -browser browserName=chrome,maxInstances=2,platform=LINUX
           background: true
 
       # run tests!
-      - run: mvn clean verify -P it -Dproperties=`pwd`/serenity.remote.properties
+      - run: mvn clean verify -P it -Dproperties=`pwd`/serenity-integration.properties
 
       - run:
           name: Save junit results
@@ -66,6 +72,7 @@ jobs:
       - run:
           name: Save serenity results
           command: |
+      # too big, takes to long to copy
             rm -rf ./target/site/serenity/fontawesome-free-5.3.1-web
             cp -r ./target/site/serenity ~/test-results/
           when: always
