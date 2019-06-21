@@ -6,14 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
       - image: circleci/openjdk:8u171-jdk-browsers
-      #- image: maven/3.6-jdk-8
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.5
-
     working_directory: ~/repo
 
     environment:
@@ -43,23 +36,17 @@ jobs:
             curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
 
       - run:
-          name: Start Selenium Grid
+          name: Start Selenium
           command: |
-            mkdir test-reports
-            java -jar selenium-server-standalone-3.5.3.jar -role hub -log test-reports/selenium.log
-          background: true
-
-      - run:
-          name: Register node
-          command: |
-            java -jar selenium-server-standalone-3.5.3.jar -role node  -hub http://localhost:4444/grid/register -browser browserName=chrome,maxInstances=2,platform=LINUX
+            mkdir selenium-log
+            java -jar selenium-server-standalone-3.5.3.jar -log selenium-log/selenium.log
           background: true
 
       # run tests!
       - run: mvn clean verify -P it -Dproperties=`pwd`/serenity-integration.properties
 
       - run:
-          name: Save junit results
+          name: Save test results
           command: |
             mkdir -p ~/test-results/junit/
             find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
@@ -70,9 +57,8 @@ jobs:
           path: ~/test-results/junit
 
       - run:
-          name: Save serenity results
+          name: Save test results
           command: |
-      # too big, takes to long to copy
             rm -rf ./target/site/serenity/fontawesome-free-5.3.1-web
             cp -r ./target/site/serenity ~/test-results/
           when: always
@@ -81,9 +67,6 @@ jobs:
       - store_artifacts:
           path: ~/test-results/serenity
 
-      # selenium grid log
       - store_artifacts:
-          path: test-reports/
-          destination: test-reports
-      - store_test_results:
-          path: test-reports/
+          path: selenium-log/
+          destination: log
