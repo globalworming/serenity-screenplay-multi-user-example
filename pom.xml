@@ -115,7 +115,6 @@
                         <include>**/e2e/testcases/**/*Test.java</include>
                     </includes>
                     <systemPropertyVariables>
-                        <webdriver.driver>chrome</webdriver.driver>
                         <webdriver.base.url>http://localhost:8080</webdriver.base.url>
                     </systemPropertyVariables>
                     <parallel>classes</parallel>
