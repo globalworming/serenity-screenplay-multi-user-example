@@ -18,7 +18,6 @@
     </parent>
 
     <properties>
-        <java.version>1.8</java.version>
         <serenity.version>2.0.52</serenity.version>
         <parallel.tests>4</parallel.tests>
     </properties>
